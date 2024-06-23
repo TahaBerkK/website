@@ -1,0 +1,54 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'index' %}">Logo</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item me-3">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" aria-current="page" href="{% url 'index' %}"><i class="fa-solid fa-house me-2"></i>Home</a>
+                </li>
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'post_create' %}active{% endif %}" href="{% url 'post_create' %}"><i class="fa-solid fa-plus me-2"></i>Create Post</a>
+                    </li>
+                {% endif %}
+            </ul>
+            
+            <form action="{% url 'index' %}" class="d-flex justify-content-center">
+                <input class="form-control me-2" style="width: 500px;" type="text" name="q" placeholder="Search around posts...">
+            </form>
+            
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <!-- Add user profile picture here -->
+                        <img {% if request.user.profile_photo %} src="{{ request.user.profile_photo.url }}"{% else %} src="/media/default.png" {% endif %} alt="Profile Picture" style="width: 30px; height: 30px; border-radius: 50%;">
+                        {{ request.user.username }}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        
+                        {% if request.user.is_authenticated %}
+                            <!-- Add dropdown menu items here -->
+                            <li><a class="dropdown-item" href="{% url 'user_profile' request.user.username %}"><i class="fa-solid fa-user me-3"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'user_settings' %}"><i class="fa-solid fa-user-pen me-2"></i>Settings</a></li>
+                            <li><a class="dropdown-item" href="{% url 'user_logout' %}"><i class="fa-solid fa-right-from-bracket me-3"></i>Logout</a></li>
+
+                        {% else %}
+                            <li class="nav-item">
+                                <a href="{% url 'user_login' %}" class="nav-link {% if request.resolver_match.url_name == 'user_login' %}active{% endif %}">User Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'user_register' %}" class="nav-link {% if request.resolver_match.url_name == 'user_register' %}active{% endif %}">Register</a>
+                            </li>
+
+                        {% endif %}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</nav>
+

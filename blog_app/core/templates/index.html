@@ -1,0 +1,74 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div id="main" class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <h2><i class="fa-solid fa-list me-2"></i>Sort by Categories</h2>
+            <div class="list-group">
+                <a href="{% url 'index' %}" class="list-group-item list-group-item-action">All</a>
+                {% for category in categories %}
+                    <a href="{% url 'index' %}?q={{category.name}}" class="list-group-item list-group-item-action">{{category.name}}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-9 mt-3">
+            {% for post in posts %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h2 class="card-title"><a href="{% url 'post_details' post.id %}">{{post.title}}</a></h2>
+                        <p class="card-subtitle mb-2 text-muted">   User: 
+                            <a href="{% url 'user_profile' post.host.username %}" class="text-primary">
+                                <img {% if post.host.profile_photo %} src="{{ post.host.profile_photo.url }}"{% else %} src="/media/default.png" {% endif %} alt="Profile Picture" style="width: 30px; height: 30px; border-radius: 50%;">
+                                {{post.host}}
+                            </a>
+                        </p>
+                        <p class="card-text">Category: {{post.category}}</p>
+                        
+                        <div class="dropdown">
+                            <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis"></i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                {% if request.user == post.host %}
+                                <a class="dropdown-item" href="{% url 'post_change' post.id %}"><i class="fa-regular fa-pen-to-square me-2"></i>Edit</a>
+                                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteModal-{{post.id}}" href="{% url 'post_delete' post.id %}"><i class="fa-solid fa-trash-can me-2"></i>Delete</a>
+                                {% endif %}
+                                <a class="dropdown-item" id="share-button" data-url="{% url 'post_details' post.id %}"><i class="fa-solid fa-share me-2"></i>Share</a>
+                            </div>
+                        </div>     
+                    </div>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="deleteModal-{{post.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Delete Post</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure to delete this post?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <a class="btn btn-danger" href="{% url 'post_delete' post.id %}">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('share-button').addEventListener('click', function(event) {
+        event.preventDefault();
+        const url = this.getAttribute('data-url');
+        navigator.clipboard.writeText(url);
+        alert('Copied to clipboard!');
+      });
+</script>
+
+{% endblock content %}

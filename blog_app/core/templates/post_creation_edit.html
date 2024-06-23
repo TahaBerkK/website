@@ -1,0 +1,17 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <h1>{% if post %}Edit {% else %}Create {% endif %}Post</h1>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}                    
+                    <button type="submit" class="btn btn-primary">{% if post %}Change{% else %}Create{% endif %}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+    

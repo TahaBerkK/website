@@ -1,0 +1,5 @@
+venv/*
+
+blog_app/media/*
+
+blog_app/db.sqlite3

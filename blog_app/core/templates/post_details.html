@@ -1,0 +1,50 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <h1>{{post.title}}</h1>
+                <p>Sent by:
+                    <a href="{% url 'user_profile' post.host.username %}">
+                        <img {% if post.host.profile_photo %} src="{{ post.host.profile_photo.url }}" {% else %} src="/media/default.png" {% endif %} alt="Profile Picture" style="width: 30px; height: 30px; border-radius: 50%;">
+                        {{post.host}}
+                    </a>
+                </p>
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" class="img-thumbnail" style="width: 100%; height: 500px;">
+                {% endif %}
+                <p>{{post.description}}</p>
+                <p>Created: {{post.created}}</p>
+                
+                <h2>Comments<i class="fa-solid fa-comment-dots ms-3"></i></h2>
+                {% for comment in comments %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <p>{{comment.content}}</p>
+                            <p>User: 
+                                <a href="{% url 'user_profile' comment.user.username %}" class="text-primary">
+                                <img {% if comment.user.profile_photo %} src="{{ comment.user.profile_photo.url }}"{% else %} src="/media/default.png" {% endif %} alt="Profile Picture" style="width: 30px; height: 30px; border-radius: 50%;">
+                                {{comment.user.username}}</a>
+                            </p>
+                            <p>Posted on: {{comment.created}}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+                
+                {% if user.is_authenticated %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="comment">Add a comment:</label>
+                            <textarea style="resize: none;" name="content" id="comment" class="form-control" rows="6"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3 mb-2">Comment</button>
+                    </form>
+                {% else %}
+                    <p>Please <a href="{% url 'user_login' %}">log in</a> or <a href="{% url 'user_register' %}"> sign in</a> to add a comment.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}
