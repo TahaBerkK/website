@@ -60,3 +60,6 @@ class UserEditForm(forms.ModelForm):
             'class': 'form-control'
         })
         self.fields['fav_sub'].choices = [(cat.id, cat.name) for cat in Category.objects.all()]
+
+
+
