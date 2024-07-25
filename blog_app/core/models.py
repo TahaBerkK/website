@@ -1,11 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser
 
-'''
-User model:
-    new ideas:
-        followers(?)(need to make a new diagram for this.. and look up for m2m diagrams and how they work.),
-'''
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -13,14 +8,31 @@ class Category(models.Model):
     def __str__(self) -> str:
         return self.name
 
+
+class Class(models.Model):
+    class_name = models.CharField(max_length=50, null=False, blank=False)
+    student_count = models.IntegerField()
+
+    def __str__(self):
+        return self.class_name
+
+
 class User(AbstractUser):
+    ROLE_CHOICES = [('student', 'Student'),
+                    ('teacher', 'Teacher'),
+                    ('manager', 'Manager')
+                    ]
+    
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
+    clas = models.ForeignKey(Class, on_delete=models.CASCADE, null=True, blank=False)
     nickname = models.CharField(max_length=100, null=True, blank=True)
     email = models.EmailField(unique=True, max_length=254)
     profile_photo = models.ImageField(null=True, blank=True, default="default.png")
     bio = models.TextField(max_length=500, null=True, blank=True)
     fav_sub = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
-
+    
     REQUIRED_FIELDS = []
+
 
 class Post(models.Model):
     host = models.ForeignKey(User, on_delete=models.CASCADE)

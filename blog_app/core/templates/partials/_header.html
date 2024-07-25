@@ -14,6 +14,13 @@
                         <a class="nav-link {% if request.resolver_match.url_name == 'post_create' %}active{% endif %}" href="{% url 'post_create' %}"><i class="fa-solid fa-plus me-2"></i>Create Post</a>
                     </li>
                 {% endif %}
+                
+                {% if request.user.role == "manager" or request.user.role == "teacher" %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'student_table' %}active{% endif %} ms-3" href="{% url 'student_table' %}"><i class="fa-solid fa-table me-2"></i>See DataTables</a>
+                    </li>
+                {% endif %}
+                    
             </ul>
             
             <form action="{% url 'index' %}" class="d-flex justify-content-center">
@@ -32,7 +39,7 @@
                         {% if request.user.is_authenticated %}
                             <!-- Add dropdown menu items here -->
                             <li><a class="dropdown-item" href="{% url 'user_profile' request.user.username %}"><i class="fa-solid fa-user me-3"></i>Profile</a></li>
-                            <li><a class="dropdown-item" href="{% url 'user_settings' %}"><i class="fa-solid fa-user-pen me-2"></i>Settings</a></li>
+                            <li><a class="dropdown-item" href="{% url 'user_settings' request.user.username %}"><i class="fa-solid fa-user-pen me-2"></i>Settings</a></li>
                             <li><a class="dropdown-item" href="{% url 'user_logout' %}"><i class="fa-solid fa-right-from-bracket me-3"></i>Logout</a></li>
 
                         {% else %}

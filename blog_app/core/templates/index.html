@@ -1,7 +1,7 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<div id="main" class="container">
+<div id="main" class="container mb-4">
     <div class="row">
         <div class="col-md-3">
             <h2><i class="fa-solid fa-list me-2"></i>Sort by Categories</h2>
@@ -30,51 +30,38 @@
                                 <i class="fas fa-ellipsis"></i>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                {% if request.user == post.host %}
-                                <a class="dropdown-item" href="{% url 'post_change' post.id %}"><i class="fa-regular fa-pen-to-square me-2"></i>Edit</a>
-                                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteModal-{{post.id}}" href="{% url 'post_delete' post.id %}"><i class="fa-solid fa-trash-can me-2"></i>Delete</a>
-                                {% endif %}
                                 <a class="dropdown-item" id="share-button" data-url="{% url 'post_details' post.id %}"><i class="fa-solid fa-share me-2"></i>Share</a>
                             </div>
                         </div>     
                     </div>
                 </div>
-                <!-- Modal -->
-                <div class="modal fade" id="deleteModal-{{post.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Delete Post</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                Are you sure to delete this post?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <a class="btn btn-danger" href="{% url 'post_delete' post.id %}">Delete</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
             {% endfor %}
-            <div>
-                <span>
-                    {% if posts.has_previous %}
-                        <a href="?page=1">&laquo; first</a>
-                        <a href="?page={{ posts.previous_page_number }}">previous</a>
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page=1">&laquo; first</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.previous_page_number }}">previous</a>
+                        </li>
                     {% endif %}
-            
-                    <span>
-                        Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
-                    </span>
-            
-                    {% if posts.has_next %}
-                        <a href="?page={{ posts.next_page_number }}">next</a>
-                        <a href="?page={{ posts.paginator.num_pages }}">last &raquo;</a>
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+                    </li>
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?{% if request.GET.q %}q={{request.GET.q}}&{% endif %}page={{ page_obj.next_page_number }}">next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?{% if request.GET.q %}q={{request.GET.q}}&{% endif %}page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                        </li>
                     {% endif %}
-                </span>
-            </div>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>

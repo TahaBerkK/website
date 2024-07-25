@@ -28,6 +28,33 @@ class PostForm(forms.ModelForm):
         })
         self.fields['category'].choices = [(cat.id, cat) for cat in Category.objects.all()]
 
+class UserRegisterForm(forms.Form):
+    username = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Enter a username'
+    }))
+    nickname = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Enter a nickname',
+    }))
+    email = forms.EmailField(max_length=200, required=True, widget=forms.EmailInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Enter an email'
+        }))
+    password = forms.CharField(max_length=100, required=True, widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Enter a password'
+        }))
+        
+class UserLoginForm(forms.Form):
+    username = forms.CharField(max_length=200, required=True, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Enter an username'
+        }))
+    password = forms.CharField(max_length=100, required=True, widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Enter a password'
+        }))
 
 class UserEditForm(forms.ModelForm):
     class Meta:

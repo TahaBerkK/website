@@ -1,0 +1,51 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="container text-center">
+    <h1 class="mt-4" id="header">404</h1>
+    <h2 class="mt-3" id="subheader">We couldn't find the page youre looking for!</h2>
+    <p class="mt-1">We tried to get the site to you, but perhaps... 
+        <br> you might be a bit naugthy and tried to access the places you shouldnt be.. 
+        <br> maybe youre a decent fellow who got the link wrong..
+        
+        {% if request.user.is_authenticated %}
+        <br>You can go back to home page with this link!
+        <br> <a href="{% url 'user_login' %}" class="btn btn-primary mt-4">Right from here!</a>
+        {% else %}
+        <br> or maybe you're just logged out! you can try login back in with the link below! 
+        <br> <a href="{% url 'user_login' %}" class="btn btn-primary mt-4">Right from here!</a>
+        {% endif %}
+    </p>            
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+            const headers = [
+            "Lost in Space?",
+            "Oops! Page Not Found",
+            "This is not the page you’re looking for",
+            "Where did it go?",
+            "Page Missing in Action",
+            "Oops! Something went wrong"
+        ];
+
+        const subHeaders = [
+            "We couldn’t find the page you’re looking for.",
+            "Looks like this page has disappeared.",
+            "Sorry, but this page does not exist.",
+            "It seems the page you’re looking for has been moved or deleted.",
+            "The page you’re looking for might be out of sight.",
+            "We couldn’t find what you were looking for."
+        ];
+        
+        function getRandomElement(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        document.getElementById('header').textContent = getRandomElement(headers);
+        document.getElementById('subheader').textContent = getRandomElement(subHeaders);
+    });
+</script>
+{% endblock content %}
+    

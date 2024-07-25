@@ -1,0 +1,93 @@
+{% extends 'main.html' %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <h1 class="text-center">Members Table</h1>  
+            <div class="col-3 d-flex">  
+                <ul class="list-group col{% if request.user == 'manager'%}-6{% endif %}">
+                    {% if request.user.role == "manager" %}
+                    <li class="list-group-item"><a href="{% url 'student_table' %}">All</a></li>
+                        {% for class in classes %}
+                            {% if class.class_name != "Manager" %}
+                                <li class="list-group-item">
+                                    <a href="?q={{class.id}}">{{ class.class_name }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <li class="list-group-item">{{request.user.clas.class_name}}</li>
+                    {% endif %}
+                </ul>
+                {% if request.user.role == "manager" %}
+                    <ul class="list-group col-6 ms-3">
+                        
+                        <li class="list-group-item"><a href="?w=teacher">Teacher</a></li>
+                        
+                        <li class="list-group-item"><a href="?w=student">Student</a></li>
+                    </ul> 
+                {% endif %}
+            </div>
+            <div class="col-9">
+                <form action="{% url 'student_table' %}" class="d-flex justify-content-center">
+                    <input class="form-control me-2" style="width: 500px;" type="text" name="search" placeholder="Search by name...">
+                </form>
+                <table class="table">
+                    <tr>
+                        <th>id</th>
+                        <th>name</th>
+                        <th>nickname</th>
+                        <th>class</th>
+                        <th>email</th>
+                        <th>role</th>
+                    </tr>
+                    
+                    {% for member in page_obj %}
+                        <tr>
+                            <td>{{ member.id }}</td>
+                            <td>{{ member.username }}</td>
+                            <td>{{ member.nickname }}</td>
+                            <td>{{ member.clas.class_name }}</td>
+                            <td>{{ member.email }}</td>
+                            <td>{{ member.role }}</td>
+                            
+                            {% if request.user.role == "manager" %}
+                            <td><a class="btn btn-primary" href="{% url 'user_settings' member.username %}">Change Info</a></td>
+                            {% endif %}
+                                
+                        </tr>
+                    {% endfor %}
+                        
+                </table>
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?{% if request.GET.q %}q={{request.GET.q}}&{% endif %}{% if request.GET.search %}search={{request.GET.search}}&{% endif %}page=1">&laquo; first</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?{% if request.GET.q %}q={{request.GET.q}}&{% endif %}{% if request.GET.search %}search={{request.GET.search}}&{% endif %}page={{ page_obj.previous_page_number }}">previous</a>
+                            </li>
+                        {% endif %}
+                        <li class="page-item disabled">
+                            <span class="page-link">
+                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                            </span>
+                        </li>
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?{% if request.GET.q %}q={{request.GET.q}}&{% endif %}{% if request.GET.search %}search={{request.GET.search}}&{% endif %}page={{ page_obj.next_page_number }}">next</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?{% if request.GET.q %}q={{request.GET.q}}&{% endif %}{% if request.GET.search %}search={{request.GET.search}}&{% endif %}page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+    
