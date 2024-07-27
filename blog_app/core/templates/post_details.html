@@ -15,14 +15,14 @@
                     <img src="{{ post.image.url }}" class="img-thumbnail" style="width: 100%; height: 500px;">
                 {% endif %}
                 <p>{{post.description}}</p>
-                <p>Created: {{post.created}}</p> 
-                <a href="{% url 'post_change' post.id %}" class="link-dark link-underline-opacity-0"><i class="fa-regular fa-pen-to-square me-2"></i>Edit</a>
+                <p>Created: {{post.created}}</p>
+                {% if request.user.role == "manager" or request.user.role == "manager" or request.user.role == "teacher" and request.user.clas.class_name == post.host.clas.class_name  %}
+                <a href="{% url 'post_change' post.id %}" class="link-dark link-underline-opacity-0 me-3"><i class="fa-regular fa-pen-to-square me-2"></i>Edit</a>
                 <a data-bs-toggle="modal" data-bs-target="#deleteModal-{{post.id}}" href="{% url 'post_delete' post.id %}" class="link-dark link-underline-opacity-0"><i class="fa-solid fa-trash-can me-2"></i>Delete</a>
-                <!-- Modal -->
-                <div class="modal fade" id="deleteModal-{{post.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
+                <div class="modal-dialog">
+                    <div class="modal fade" id="deleteModal-{{post.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-content">
+                        <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">Delete Post</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
@@ -36,8 +36,10 @@
                         </div>
                     </div>
                 </div>
-                
+                {% endif %}
+
                 <h2>Comments<i class="fa-solid fa-comment-dots ms-3"></i></h2>
+                
                 {% for comment in comments %}
                     <div class="card mb-2">
                         <div class="card-body">

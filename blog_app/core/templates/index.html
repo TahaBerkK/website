@@ -5,10 +5,10 @@
     <div class="row">
         <div class="col-md-3">
             <h2><i class="fa-solid fa-list me-2"></i>Sort by Categories</h2>
-            <div class="list-group">
-                <a href="{% url 'index' %}" class="list-group-item list-group-item-action">All</a>
+            <div>
+                <a href="{% url 'index' %}" class="btn btn-light border-dark w-100">All</a>
                 {% for category in categories %}
-                    <a href="{% url 'index' %}?q={{category.name}}" class="list-group-item list-group-item-action">{{category.name}}</a>
+                    <a href="{% url 'index' %}?q={{category.name}}" class="btn btn-light border-secondary w-100 my-1">{{category.name}}</a>
                 {% endfor %}
             </div>
         </div>
@@ -16,16 +16,15 @@
             {% for post in posts %}
                 <div class="card mb-3">
                     <div class="card-body">
+                        <div class="d-inline-block">
                         <h2 class="card-title"><a href="{% url 'post_details' post.id %}">{{post.title}}</a></h2>
-                        <p class="card-subtitle mb-2 text-muted">   User: 
-                            <a href="{% url 'user_profile' post.host.username %}" class="text-primary">
-                                <img {% if post.host.profile_photo %} src="{{ post.host.profile_photo.url }}"{% else %} src="/media/default.png" {% endif %} alt="Profile Picture" style="width: 30px; height: 30px; border-radius: 50%;">
-                                {{post.host}}
-                            </a>
+                        <p class="card-subtitle mb-2">   
+                            Sent by {{post.host.nickname}}(AKA: {{post.host.nickname}}) at {{post.created}}
                         </p>
                         <p class="card-text">Category: {{post.category}}</p>
+                        </div>
                         
-                        <div class="dropdown">
+                        <div class="dropdown d-inline-block float-end">
                             <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-ellipsis"></i>
                             </button>

@@ -5,28 +5,26 @@
     <div class="container">
         <div class="row">
             <h1 class="text-center">Members Table</h1>  
-            <div class="col-3 d-flex">  
-                <ul class="list-group col{% if request.user == 'manager'%}-6{% endif %}">
-                    {% if request.user.role == "manager" %}
-                    <li class="list-group-item"><a href="{% url 'student_table' %}">All</a></li>
-                        {% for class in classes %}
-                            {% if class.class_name != "Manager" %}
-                                <li class="list-group-item">
-                                    <a href="?q={{class.id}}">{{ class.class_name }}</a>
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        <li class="list-group-item">{{request.user.clas.class_name}}</li>
-                    {% endif %}
-                </ul>
+            <div class="col-3">  
                 {% if request.user.role == "manager" %}
-                    <ul class="list-group col-6 ms-3">
-                        
-                        <li class="list-group-item"><a href="?w=teacher">Teacher</a></li>
-                        
-                        <li class="list-group-item"><a href="?w=student">Student</a></li>
+                <a href="{% url 'student_table' %}" class="btn btn-primary rounded my-1 w-100">All</a>
+                <div class="d-flex justify-content-around">
+                    <ul class="text-center p-0">
+                        <li class="list-group-item"><h3>Sort By Classes</h3></li>
+                    {% for class in classes %}
+                        {% if class.class_name != "Manager" %}
+                            <li class="list-group-item">
+                                <a href="?q={{class.id}}" class="btn btn-secondary rounded my-1">{{ class.class_name }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+                    <ul class="ms-3 text-center p-0">
+                        <li class="list-group-item"><h3>Sort By Roles</h3></li>
+                        <li class="list-group-item"><a href="?w=teacher" class="btn btn-secondary rounded my-1">Teacher</a></li>
+                        <li class="list-group-item"><a href="?w=student" class="btn btn-secondary rounded my-1">Student</a></li>
                     </ul> 
+                </div>
                 {% endif %}
             </div>
             <div class="col-9">
